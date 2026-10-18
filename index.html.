@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOLDEN — Luxury Store</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #d4af37;
+      --black: #0b0b0b;
+      --panel: #151515;
+      --muted: #aaa;
+    }
+    body {
+      background: var(--black);
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 22px 7%;
+      border-bottom: 1px solid #292929;
+      position: sticky; top: 0; background: #0b0b0bf5;
+      z-index: 5;
+    }
+    .logo { color: var(--gold); font-size: 25px; letter-spacing: 5px; font-weight: bold; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .cart-button {
+      border: 1px solid var(--gold); color: var(--gold);
+      background: transparent; padding: 10px 15px; border-radius: 4px;
+    }
+    .hero {
+      padding: 85px 7%; text-align: center;
+      background: radial-gradient(ellipse at center, #3b2c0c 0%, #15120b 35%, #0b0b0b 75%);
+    }
+    .eyebrow { color: var(--gold); letter-spacing: 4px; font-size: 12px; }
+    h1 { font-size: clamp(38px, 7vw, 76px); margin: 20px 0; }
+    h1 span { color: var(--gold); }
+    .hero p { color: #ccc; line-height: 1.7; }
+    .hero a {
+      display: inline-block; margin-top: 28px; padding: 14px 25px;
+      color: #080808; background: var(--gold); text-decoration: none;
+      font-weight: bold; border-radius: 3px;
+    }
+    main { padding: 45px 7% 70px; }
+    .section-top {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 25px;
+    }
+    h2 { font-size: 27px; }
+    h2 span { color: var(--gold); }
+    .tools { display: flex; gap: 10px; flex-wrap: wrap; }
+    input, select {
+      background: var(--panel); border: 1px solid #383838;
+      color: white; padding: 11px; border-radius: 4px;
+    }
+    .categories { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 28px; }
+    .category {
+      background: transparent; border: 1px solid #444;
+      color: #ddd; padding: 9px 15px; border-radius: 30px;
+    }
+    .category.active, .category:hover {
+      background: var(--gold); color: #111; border-color: var(--gold);
+    }
+    .products {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .product {
+      background: var(--panel); border: 1px solid #262626;
+      border-radius: 7px; overflow: hidden; transition: transform .2s;
+    }
+    .product:hover { transform: translateY(-5px); border-color: #8d7426; }
+    .product-art {
+      height: 190px; display: grid; place-items: center;
+      font-size: 70px; background: radial-gradient(circle, #33280e, #171717 70%);
+    }
+    .product-info { padding: 17px; }
+    .tag { color: var(--gold); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
+    .product h3 { margin: 10px 0; font-size: 17px; }
+    .description { color: var(--muted); font-size: 13px; min-height: 32px; }
+    .product-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; margin-top: 18px;
+    }
+    .price { color: var(--gold); font-weight: bold; font-size: 18px; }
+    .add {
+      background: var(--gold); color: #111; border: none;
+      padding: 10px 12px; border-radius: 3px; font-weight: bold;
+    }
+    .empty { color: var(--muted); padding: 35px 0; }
+    .cart-panel {
+      display: none; padding: 20px; margin-bottom: 30px;
+      background: #171717; border: 1px solid #5d4b19; border-radius: 6px;
+    }
+    .cart-panel.show { display: block; }
+    .cart-line {
+      display: flex; justify-content: space-between;
+      gap: 15px; padding: 12px 0; border-bottom: 1px solid #333;
+    }
+    .remove { background: none; border: none; color: #e3c45b; }
+    .cart-total { margin-top: 18px; color: var(--gold); font-size: 20px; }
+    footer {
+      border-top: 1px solid #292929; text-align: center;
+      padding: 35px 7%; color: #999; line-height: 2;
+    }
+    footer strong { color: var(--gold); letter-spacing: 3px; }
+    @media (max-width: 900px) {
+      .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 500px) {
+      header { padding: 17px 5%; }
+      .logo { font-size: 20px; }
+      .hero { padding: 65px 5%; }
+      main { padding: 35px 5%; }
+      .products { gap: 12px; }
+      .product-art { height: 140px; font-size: 52px; }
+      .product-info { padding: 12px; }
+      .product-bottom { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">GOLDEN.</div>
+    <button class="cart-button" onclick="toggleCart()">
+      Bag (<span id="cart-count">0</span>)
+    </button>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">THE PREMIUM COLLECTION</div>
+    <h1>Luxury in <span>Every Detail.</span></h1>
+    <p>Discover your next favorite thing.<br>
+      Curated essentials. Timeless style. Exceptional taste.</p>
+    <a href="#shop">EXPLORE THE COLLECTION</a>
+  </section>
+
+  <main id="shop">
+    <div id="cart" class="cart-panel">
+      <h2>Your <span>Shopping Bag</span></h2>
+      <div id="cart-items"></div>
+      <div class="cart-total">Total: $<span id="cart-total">0.00</span></div>
+      <p style="color:#aaa;font-size:13px;margin-top:10px">
+        Demo store — checkout and payments are not connected yet.
+      </p>
+    </div>
+
+    <div class="section-top">
+      <h2>Shop the <span>Collection</span></h2>
+      <div class="tools">
+        <input id="search" placeholder="Search products..." oninput="renderProducts()">
+        <select id="sort" onchange="renderProducts()">
+          <option value="featured">Featured</option>
+          <option value="low">Price: Low to High</option>
+          <option value="high">Price: High to Low</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="categories" id="categories">
+      <button class="category active" data-category="All">All Items</button>
+      <button class="category" data-category="Fashion">Fashion</button>
+      <button class="category" data-category="Tech">Tech</button>
+      <button class="category" data-category="Home">Home</button>
+      <button class="category" data-category="Accessories">Accessories</button>
+    </div>
+
+    <div class="products" id="products"></div>
+    <p id="empty" class="empty" hidden>No products found. Try another search.</p>
+  </main>
+
+  <footer>
+    <strong>GOLDEN.</strong>
+    <p>Luxury finds for everyday life.</p>
+    <p>© <span id="year"></span> GOLDEN. Demo storefront.</p>
+  </footer>
+
+  <script>
+    const products = [
+     
+const products = [
+  {id:1,name:"Classic Black Watch",category:"Accessories",price:89,image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=85",desc:"A timeless everyday statement."},
+  {id:2,name:"Premium Headphones",category:"Tech",price:129,image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=85",desc:"Your music, in elevated style."},
+  {id:3,name:"Signature Hoodie",category:"Fashion",price:65,image:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=85",desc:"Comfort meets clean design."},
+  {id:4,name:"Minimal Sneakers",category:"Fashion",price:95,image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=85",desc:"Made for everyday movement."},
+  {id:5,name:"Gold Desk Lamp",category:"Home",price:74,image:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=85",desc:"Give your space a warm glow."},
+  {id:6,name:"Everyday Backpack",category:"Accessories",price:58,image:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=85",desc:"Carry your essentials in style."},
+  {id:7,name:"Wireless Speaker",category:"Tech",price:79,image:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=800&q=85",desc:"Big sound, sleek design."},
+  {id:8,name:"Luxury Candle",category:"Home",price:35,image:"https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=800&q=85",desc:"Create your perfect atmosphere."}
+];
+
+    let activeCategory = "All";
+    let cart = [];
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    document.getElementById("categories").addEventListener("click", event => {
+      const button = event.target.closest("button[data-category]");
+      if (!button) return;
+      activeCategory = button.dataset.category;
+      document.querySelectorAll(".category").forEach(b =>
+        b.classList.toggle("active", b === button)
+      );
+      renderProducts();
+    });
+
+    function renderProducts() {
+      const query = document.getElementById("search").value.toLowerCase();
+      const sort = document.getElementById("sort").value;
+      let shown = products.filter(p =>
+        (activeCategory === "All" || p.category === activeCategory) &&
+        (p.name.toLowerCase().includes(query) ||
+         p.category.toLowerCase().includes(query))
+      );
+
+      if (sort === "low") shown.sort((a,b) => a.price - b.price);
+      if (sort === "high") shown.sort((a,b) => b.price - a.price);
+
+      document.getElementById("empty").hidden = shown.length > 0;
+      document.getElementById("products").innerHTML = shown.map(p => `
+        <article class="product">
+          <div class="product-art">${p.icon}</div>
+          <div class="product-info">
+            <div class="tag">${p.category}</div>
+            <h3>${p.name}</h3>
+            <p class="description">${p.desc}</p>
+            <div class="product-bottom">
+              <span class="price">$${p.price.toFixed(2)}</span>
+              <button class="add" onclick="addToCart(${p.id})">Add to Bag +</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function addToCart(id) {
+      const item = cart.find(p => p.id === id);
+      if (item) item.quantity++;
+      else cart.push({...products.find(p => p.id === id), quantity:1});
+      renderCart();
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(p => p.id !== id);
+      renderCart();
+    }
+
+    function renderCart() {
+      document.getElementById("cart-count").textContent =
+        cart.reduce((sum,p) => sum + p.quantity, 0);
+
+      document.getElementById("cart-items").innerHTML = cart.length
+        ? cart.map(p => `
+          <div class="cart-line">
+            <span>${p.name} × ${p.quantity}</span>
+            <span>$${(p.price * p.quantity).toFixed(2)}
+              <button class="remove" onclick="removeFromCart(${p.id})">Remove</button>
+            </span>
+          </div>
+        `).join("")
+        : '<p style="color:#aaa;margin-top:15px">Your bag is empty.</p>';
+
+      const total = cart.reduce((sum,p) => sum + p.price * p.quantity, 0);
+      document.getElementById("cart-total").textContent = total.toFixed(2);
+    }
+
+    function toggleCart() {
+      document.getElementById("cart").classList.toggle("show");
+    }
+
+    renderProducts();
+    renderCart();
+  </script>
+</body>
+</html>
