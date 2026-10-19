@@ -223,8 +223,7 @@ const products = [
       document.getElementById("empty").hidden = shown.length > 0;
       document.getElementById("products").innerHTML = shown.map(p => `
         <article class="product">
-          <div class="product-art">${p.icon}</div>
-          <div class="product-info">
+     <div class="product-art">${p.icon}</div>          <div class="product-info">
             <div class="tag">${p.category}</div>
             <h3>${p.name}</h3>
             <p class="description">${p.desc}</p>
